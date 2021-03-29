@@ -140,19 +140,20 @@ client.on("guildDelete", guild => {
 });
 
 //Scans all new messages, deletes and notifies user that they are not permitted to use the swear words if its match the filter below.
-client.on(`message`, async message => {
-    if (message.guild.id != '335008833267040256')return;
-    {
-      const swearWords = [`nigger`, `negro`, `nigga`, `wigga`, `wigger`]
-         try {
-        if (swearWords.some(word => message.content.toLowerCase().includes(word))) {
-            //if(!message.member.roles.some(r=>["G_D_A"].includes(r.name)) )return;
-            await message.delete();
-            await message.reply(`please control your language, racism is not allowed here!`)
-        }
-    } catch (e) {
-        console.log(e);
+let set = new Set(['nigger', 'negro', 'nigga', 'wigga', 'wigger'])
+client.on('message', (msg) => {
+    if(msg.author.bot) {
+    return
+  }
+  let wordArray = msg.content.split(' ')
+  console.log(wordArray)
+  for(var i = 0; i < wordArray.length; i++) {
+    if(set.has(wordArray[i])) {
+    msg.delete()
+    msg.channel.send(`${msg.author.username}, that's a word I dont like.`)
+    break
     }
+    console.log(`Message scanned`)
   }
 });
 
